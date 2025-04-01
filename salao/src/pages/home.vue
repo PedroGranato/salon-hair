@@ -105,7 +105,7 @@ export default defineComponent({
         { nome: 'Funcionário 5', func: 'Funções' },
     ];
     const goToCalendar = () => {
-        router.push('/Appointment');
+        router.push('/scheduling');
     };
 
     return {
