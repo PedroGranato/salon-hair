@@ -5,6 +5,8 @@ import finances from '../pages/finances.vue';
 import Home from '../pages/home.vue'; 
 import Appointment from '../pages/Appointment.vue';
 import scheduling from '../pages/Scheduling.vue';
+import timings from '../pages/timings.vue';
+
 
 import path from 'path';
 
@@ -28,6 +30,10 @@ const routes = [
 {
     path: '/Scheduling',
     component: scheduling,
+},
+{
+    path: '/timings',
+    component: timings,
 },
 ];
 

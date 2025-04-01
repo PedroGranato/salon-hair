@@ -1,114 +1,123 @@
 <template>
 <div class="min-h-screen flex flex-col bg-white">
-    <!-- Header -->
-    <header class="bg-pink-300 text-white p-4 flex items-center justify-between">
-    <h1 class="text-lg font-bold">Meu Salão</h1>
+<header class="bg-pink-300 text-white p-4 flex items-center justify-between">
+        <Button @click="goToHome"><h1 class="text-white text-xl font-bold">Cabeleireiro</h1></Button>
     <SearchIcon class="w-6 h-6 cursor-pointer" />
-    </header>
-
-    <!-- Conteúdo principal -->
-    <main class="flex-1 max-w-5xl mx-auto w-full p-6">
-    
-    <!-- Serviços -->
-    <section class="mb-10">
-        <h2 class="text-2xl font-semibold mb-4">Serviços:</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-        <div class="bg-gray-200 shadow-sm flex flex-col items-center justify-center p-2 h-40 w-32">
-            <h3 class="font-bold mb-2 text-center">Cabelo</h3>
-            <p class="text-sm text-center mb-4">1 hr</p>
-            <button class="bg-gray-300 hover:bg-gray-400 px-2 py-2 text-sm rounded">Agendar</button>
-        </div>
-        <div class="bg-gray-200 shadow-sm flex flex-col items-center justify-center p-2 h-40 w-32">
-            <h3 class="font-bold mb-2 text-center">Barba</h3>
-            <p class="text-sm text-center mb-4">30 min</p>
-            <button class="bg-gray-300 hover:bg-gray-400 px-2 py-2 text-sm rounded">Agendar</button>
-        </div>
-        <div class="bg-gray-200 shadow-sm flex flex-col items-center justify-center p-2 h-40 w-32">
-            <h3 class="font-bold mb-2 text-center">Pé</h3>
-            <p class="text-sm text-center mb-4">30 min</p>
-            <button class="bg-gray-300 hover:bg-gray-400 px-2 py-2 text-sm rounded">Agendar</button>
-        </div>
-        <div class="bg-gray-200 shadow-sm flex flex-col items-center justify-center p-2 h-40 w-32">
-            <h3 class="font-bold mb-2 text-center">Mão</h3>
-            <p class="text-sm text-center mb-4">30 min</p>
-            <button class="bg-gray-300 hover:bg-gray-400 px-2 py-2 text-sm rounded">Agendar</button>
-        </div>
-        </div>
-    </section>
-
-    <!-- Pacotes -->
-    <section class="mb-5">
-        <h2 class="text-2xl font-semibold mb-4">Pacotes:</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 ">
-        <div class="bg-gray-200 shadow-sm flex flex-col items-center justify-center p-2 h-40 w-32">
-            <h3 class="font-bold mb-4 text-center">Cabelo</h3>
-            <p class="text-sm text-center mb-6">3 cortes</p>
-            <button class="bg-gray-300 hover:bg-gray-400 px-2 py-2 text-sm rounded">Agendar</button>
-        </div>
-        <div class="bg-gray-200 shadow-sm flex flex-col items-center justify-center p-2 h-40 w-32">
-            <h3 class="font-bold mb-4 text-center">Pé</h3>
-            <p class="text-sm text-center mb-6">2 sessões</p>
-            <button class="bg-gray-300 hover:bg-gray-400 px-2 py-2 text-sm rounded">Agendar</button>
-        </div>
-        <div class="bg-gray-200 shadow-sm flex flex-col items-center justify-center p-2 h-40 w-32">
-            <h3 class="font-bold mb-4 text-center">Mão</h3>
-            <p class="text-sm text-center mb-6">2 sessões</p>
-            <button class="bg-gray-300 hover:bg-gray-400 px-2 py-2 text-sm rounded">Agendar</button>
-        </div>
-        <div class="bg-gray-200 shadow-sm flex flex-col items-center justify-center p-2 h-40 w-32">
-            <h3 class="font-bold mb-2 text-center">Cabelo e Barba</h3>
-            <p class="text-sm text-center mb-4">3 cortes</p>
-            <button class="bg-gray-300 hover:bg-gray-400 px-2 py-2 text-sm rounded">Agendar</button>
-        </div>
-        </div>
-    </section>
-</main> 
-    <!-- Funcionários -->
-    <section class="py-8 px-4">
-        <h2 class="text-xl md:text-2xl font-semibold mb-4">Nosso Time</h2>
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        <div v-for="(funcionario, index) in funcionarios" :key="index" class="bg-pink-100 shadow-sm flex flex-col items-center justify-center p-6 m-4">
-            <img src="../../quadrado branco.png" alt="Teste" class="w-50 h-70 bg-white mb-4" >
-            <h3 class="font-bold mb-2 text-center">{{ funcionario.nome }}</h3>
-            <button class="bg-pink-300 text-white px-4 py-2 rounded hover:bg-pink-400 transition">
-            Agendar
-            </button>
+</header>
+<main class="flex-1 max-w-5xl mx-auto w-full p-6">
+<!-- Serviços -->
+<section class="mb-10">
+    <h2 class="text-2xl font-semibold mb-4">Serviços:</h2>
+    <div class="flex flex-wrap gap-6 justify-center">
+    <div class="bg-gray-200  p-6 flex flex-col items-center w-40 h-52 rounded-lg">
+        <h3 class="font-bold text-center text-lg mb-3">Cabelo</h3>
+        <p class="text-sm text-center mb-3">1 hr</p>
+        <button @click="goTotimings" class="bg-gray-300 hover:bg-gray-400 px-3 py-2 text-sm rounded mt-auto">
+        Agendar
+        </button>
+    </div>
+    <div class="bg-gray-200  p-6 flex flex-col items-center w-40 h-52 rounded-lg">
+        <h3 class="font-bold text-center text-lg mb-3">Pé</h3>
+        <p class="text-sm text-center mb-3">30 min</p>
+        <button @click="goTotimings" class="bg-gray-300 hover:bg-gray-400 px-3 py-2 text-sm rounded mt-auto">
+        Agendar
+        </button>
+    </div>
+    <div class="bg-gray-200  p-6 flex flex-col items-center w-40 h-52 rounded-lg">
+        <h3 class="font-bold text-center text-lg mb-3">Mão</h3>
+        <p class="text-sm text-center mb-3">30 min</p>
+        <button @click="goTotimings" class="bg-gray-300 hover:bg-gray-400 px-3 py-2 text-sm rounded mt-auto">Agendar</button>
+    </div>
+        <div class="bg-gray-200  p-6 flex flex-col items-center w-40 h-52 rounded-lg">
+        <h3 class="font-bold text-center text-lg mb-3">Cabelo e barba</h3>
+        <p class="text-sm text-center mb-3">1 hr</p>
+        <button @click="goTotimings" class="bg-gray-300 hover:bg-gray-400 px-3 py-2 text-sm rounded mt-auto">Agendar</button>
         </div>
     </div>
-    </section>
-    <!--PP-->
-    <section class="py-16 px-4">
+</section>
+
+        <!-- Pacotes -->
+        <section class="mb-10">
+            <h2 class="text-2xl font-semibold mb-4">Pacotes:</h2>
+            <div class="flex flex-wrap gap-6 justify-center">
+            <div class="bg-gray-200  p-6 flex flex-col items-center w-40 h-52 rounded-lg">
+                <h3 class="font-bold text-center text-lg mb-3">Cabelo</h3>
+                <p class="text-sm text-center mb-3">3 cortes</p>
+                <button @click="goTotimings" class="bg-gray-300 hover:bg-gray-400 px-3 py-2 text-sm rounded mt-auto">
+                Agendar
+                </button>
+            </div>
+            <div class="bg-gray-200  p-6 flex flex-col items-center w-40 h-52 rounded-lg">
+                <h3 class="font-bold text-center text-lg mb-3">Pé</h3>
+                <p class="text-sm text-center mb-3">2 sessões</p>
+                <button @click="goTotimings" class="bg-gray-300 hover:bg-gray-400 px-3 py-2 text-sm rounded mt-auto">
+                Agendar
+                </button>
+            </div>
+            <div class="bg-gray-200  p-6 flex flex-col items-center w-40 h-52 rounded-lg">
+                <h3 class="font-bold text-center text-lg mb-3">Mão</h3>
+                <p class="text-sm text-center mb-3">2 sessões</p>
+                <button @click="goTotimings" class="bg-gray-300 hover:bg-gray-400 px-3 py-2 text-sm rounded mt-auto">
+                Agendar
+                </button>
+            </div>
+            <div class="bg-gray-200  p-6 flex flex-col items-center w-40 h-52 rounded-lg">
+                <h3 class="font-bold text-center text-lg mb-3">Cabelo e barba</h3>
+                <p class="text-sm text-center mb-3">3 cortes</p>
+                <button @click="goTotimings" class="bg-gray-300 hover:bg-gray-400 px-3 py-2 text-sm rounded mt-auto">
+                Agendar
+                </button>
+            </div>
+            </div>
+        </section>
+
+        </main> 
+        <!-- Funcionários -->
+        <section class="py-8 px-4">
+        <h2 class="text-xl md:text-2xl font-semibold mb-4">Nosso Time</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div v-for="(funcionario, index) in funcionarios" :key="index" class="bg-pink-100 shadow-sm flex flex-col items-center justify-center p-6 m-4">
+            <img src="../../quadrado branco.png" alt="Teste" class="w-50 h-70 bg-white mb-4">
+            <h3 class="font-bold mb-2 text-center">{{ funcionario.nome }}</h3>
+            <button class="bg-pink-300 text-white px-4 py-2 rounded hover:bg-pink-400 transition">
+                Agendar
+            </button>
+            </div>
+        </div>
+        </section>
+        <!-- PP -->
+        <section class="py-16 px-4">
         <div class="flex flex-col md:flex-row md:justify-between gap-4">
-        <!--price-->
-        <div class="w-full md:w-1/2">
+            <!-- Price -->
+            <div class="w-full md:w-1/2">
             <h2 class="text-xl py-6 md:text-2xl font-semibold mb-4">Preços</h2>
             <div class="space-y-2">
-            <div class="flex justify-between">
+                <div class="flex justify-between">
                 <span>Corte</span>
                 <span>R$ 40</span>
-            </div>
-            <div class="flex justify-between">
+                </div>
+                <div class="flex justify-between">
                 <span>Mão</span>
                 <span>R$ 40</span>
-            </div>
-            <div class="flex justify-between">
+                </div>
+                <div class="flex justify-between">
                 <span>Pé</span>
                 <span>R$ 40</span>
-            </div>
-            <div class="flex justify-between">
+                </div>
+                <div class="flex justify-between">
                 <span>Pé e mão</span>
                 <span>R$ 40</span>
+                </div>
             </div>
             </div>
-        </div>
-        <!--picture-->
+        <!-- Picture -->
         <div class="w-full md:w-1/2">
             <div class="bg-pink-100 w-full h-64 flex items-center justify-center rounded-md shadow-sm">
-            <span class="text-gray-600 text-center">Foto Salão</span>
+                <span class="text-gray-600 text-center">Foto Salão</span>
             </div>
         </div>
         </div>
-    </section>
+</section>
 
     <!--Whatsapp-->
     <div class="fixed bottom-4 right-4 z-50">
@@ -128,11 +137,19 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { SearchIcon } from 'lucide-vue-next';
+import { useRouter } from 'vue-router';
+import router from '../router';
 
 interface Funcionario {
     nome: string;
 }
 
+const goToHome = () => {
+        router.push('/');
+    };
+        const goTotimings = () => {
+        router.push('/timings');
+};
 export default defineComponent({
     setup() {
         const funcionarios: Funcionario[] = [
@@ -144,6 +161,8 @@ export default defineComponent({
         ];
 
         return {
+            goTotimings,
+            goToHome,
             funcionarios,
         };
     },
