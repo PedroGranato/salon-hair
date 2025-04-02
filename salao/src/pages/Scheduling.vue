@@ -79,7 +79,7 @@
             <div v-for="(funcionario, index) in funcionarios" :key="index" class="bg-pink-100 shadow-sm flex flex-col items-center justify-center p-6 m-4">
             <img src="../../quadrado branco.png" alt="Teste" class="w-50 h-70 bg-white mb-4">
             <h3 class="font-bold mb-2 text-center">{{ funcionario.nome }}</h3>
-                <button @click="goToclerk" class="bg-pink-300 text-white px-4 py-2 rounded hover:bg-pink-400 transition">Agendar</button>
+                <button @click="Clerk(funcionario)" class="bg-pink-300 text-white px-4 py-2 rounded hover:bg-pink-400 transition">Agendar</button>
             </div>
         </div>
         </section>
@@ -169,15 +169,15 @@ export default defineComponent({
             {id: 4, nome: 'Funcionário 5' },
             {id: 5, nome: 'Funcionário 1' },
         ];
-        const clerk = (funcionario: Funcionario) => {
+        const Clerk = (funcionario: Funcionario) => {
         router.push({
-        name: 'clerk',
+        name: 'clerk', // rota de destino definida no router
         query: { funcionario: JSON.stringify(funcionario) },
     });
     };
 
         return {
-            clerk,
+            Clerk,
             goToclerk,
             goTotimings,
             goToHome,
