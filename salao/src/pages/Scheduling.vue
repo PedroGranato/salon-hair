@@ -79,9 +79,7 @@
             <div v-for="(funcionario, index) in funcionarios" :key="index" class="bg-pink-100 shadow-sm flex flex-col items-center justify-center p-6 m-4">
             <img src="../../quadrado branco.png" alt="Teste" class="w-50 h-70 bg-white mb-4">
             <h3 class="font-bold mb-2 text-center">{{ funcionario.nome }}</h3>
-            <button class="bg-pink-300 text-white px-4 py-2 rounded hover:bg-pink-400 transition">
-                Agendar
-            </button>
+                <button @click="goToclerk" class="bg-pink-300 text-white px-4 py-2 rounded hover:bg-pink-400 transition">Agendar</button>
             </div>
         </div>
         </section>
@@ -144,23 +142,43 @@ interface Funcionario {
     nome: string;
 }
 
+
 const goToHome = () => {
         router.push('/');
     };
-        const goTotimings = () => {
-        router.push('/timings');
+    const goTotimings = () => {
+    router.push('/timings');
 };
+
+    const goToclerk = () => {
+    router.push('/clerk');
+};
+interface Funcionario {
+    id: number;
+    nome: string;
+}
+
 export default defineComponent({
+    name: 'scheduling',
     setup() {
+        const router = useRouter();
         const funcionarios: Funcionario[] = [
-            { nome: 'Funcionário 2' },
-            { nome: 'Funcionário 3' },
-            { nome: 'Funcionário 4' },
-            { nome: 'Funcionário 5' },
-            { nome: 'Funcionário 1' },
+            {id: 1, nome: 'Funcionário 2' },
+            {id: 2, nome: 'Funcionário 3' },
+            {id: 3, nome: 'Funcionário 4' },
+            {id: 4, nome: 'Funcionário 5' },
+            {id: 5, nome: 'Funcionário 1' },
         ];
+        const clerk = (funcionario: Funcionario) => {
+        router.push({
+        name: 'clerk',
+        query: { funcionario: JSON.stringify(funcionario) },
+    });
+    };
 
         return {
+            clerk,
+            goToclerk,
             goTotimings,
             goToHome,
             funcionarios,
@@ -168,7 +186,3 @@ export default defineComponent({
     },
 });
 </script>
-
-<style scoped>
-/* Removi estilos que forçavam tamanho fixo muito grande */
-</style>

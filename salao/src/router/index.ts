@@ -6,9 +6,10 @@ import Home from '../pages/home.vue';
 import Appointment from '../pages/Appointment.vue';
 import scheduling from '../pages/Scheduling.vue';
 import timings from '../pages/timings.vue';
-
+import clerk from '../pages/clerk.vue';
 
 import path from 'path';
+import { c } from 'vite/dist/node/moduleRunnerTransport.d-CXw_Ws6P';
 
 const routes = [
 {
@@ -34,6 +35,11 @@ const routes = [
 {
     path: '/timings',
     component: timings,
+},
+{
+    path: '/clerk',
+    name: 'clerk',
+    component: clerk,
 },
 ];
 

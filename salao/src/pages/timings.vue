@@ -61,7 +61,7 @@
             <div v-if="profissionalSelecionado" class="mb-6 mx-auto max-w-lg px-6 mt-6 text-center">
                 <h2 class="text-lg font-bold mb-2">Resumo do Agendamento</h2>
                 <div class="bg-gray-100 p-6 rounded w-full inline-block text-left">
-                    <p><span class="font-semibold">Data:</span> {{ diaSelecionado.data }} ({{ diaSelecionado.diaSemana }})</p>
+                    <p v-if="diaSelecionado"><span class="font-semibold">Data:</span> {{ diaSelecionado.data }} ({{ diaSelecionado.diaSemana }})</p>
                     <p><span class="font-semibold">Horário:</span> {{ horarioSelecionado }}</p>
                     <p><span class="font-semibold">Profissional:</span> {{ profissionalSelecionado.nome }}</p>
                     <button class="mt-4 px-4 py-2 bg-pink-300 text-white rounded hover:bg-pink-500 transition" @click="finalizar">Finalizar Agendamento</button>
