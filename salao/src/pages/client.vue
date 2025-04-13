@@ -62,7 +62,6 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { SearchIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-vue-next'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()

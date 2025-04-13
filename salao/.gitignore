@@ -116,3 +116,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+fHRYQLB6TaT233rp
+
+mongodb+srv://Pedro:fHRYQLB6TaT233rp@hair.hqjlzsu.mongodb.net/?retryWrites=true&w=majority&appName=Hair

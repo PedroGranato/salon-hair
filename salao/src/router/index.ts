@@ -8,7 +8,6 @@ import scheduling from '../pages/Scheduling.vue';
 import timings from '../pages/timings.vue';
 import clerk from '../pages/clerk.vue';
 
-import path from 'path';
 import { c } from 'vite/dist/node/moduleRunnerTransport.d-CXw_Ws6P';
 
 const routes = [

@@ -138,7 +138,6 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { SearchIcon } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 import router from '../router';
 

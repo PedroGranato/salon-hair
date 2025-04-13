@@ -4,9 +4,12 @@
         <!-- Header + Cabeçalho da tabela -->
         <div class="bg-pink-300 p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
             <!-- Nome do funcionário -->
-            <span class="text-white font-semibold text-lg">
-                {{ employeeName }}
-            </span>
+            <select class="bg-pink-300 text-gray-800 font-semibold text-left  px-2 py-1 focus:outline-none border-none cursor-pointer" v-model="func.Func1">
+                <option value="Denise">Denise</option>
+                <option value="Ana">Ana</option>
+                <option value="Maria">Maria</option>
+                <option value="João">João</option>
+            </select>
             <!-- Data (input date) -->
             <div class="flex-1 flex justify-center">
                 <input
@@ -93,11 +96,7 @@ interface Appointment {
 export default defineComponent({
     name: 'AppointmentsTable',
     props: {
-        // Nome do funcionário
-        employeeName: {
-            type: String,
-            default: 'Denise',
-        },
+
         // Data
         defaultDate: {
             type: String,
@@ -118,6 +117,13 @@ export default defineComponent({
             serviceFilter: 'Todos',
             totalValue: 'R$0', // Somente leitura
         });
+
+        const func = ref({
+            Func1: 'Denise',
+            Func2: 'Ana',
+            Func3: 'Maria',
+            Func4: 'João',
+        })
         const goToCalendar = () => {
         router.push('/Appointment');
     };
@@ -130,6 +136,7 @@ export default defineComponent({
             footerForm,
             goToCalendar,
             goToclient,
+            func,
 
         };
     },
