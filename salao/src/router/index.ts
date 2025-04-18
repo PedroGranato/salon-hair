@@ -7,6 +7,8 @@ import Appointment from '../pages/Appointment.vue';
 import scheduling from '../pages/Scheduling.vue';
 import timings from '../pages/timings.vue';
 import clerk from '../pages/clerk.vue';
+import login from '../pages/login.vue';
+import register from '../pages/register.vue';
 
 import { c } from 'vite/dist/node/moduleRunnerTransport.d-CXw_Ws6P';
 
@@ -39,6 +41,15 @@ const routes = [
     path: '/clerk',
     name: 'clerk',
     component: clerk,
+},
+
+{
+    path: '/login',
+    component: login,
+},
+{
+    path: '/register',
+    component: register,
 },
 ];
 
