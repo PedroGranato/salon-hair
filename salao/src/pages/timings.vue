@@ -5,11 +5,9 @@
             <Button @click="goToHome">
                 <h1 class="text-white text-xl font-bold">Cabeleireiro</h1>
             </Button>
-            <button class="text-white text-2xl">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A10.971 10.971 0 0112 15c2.486 0 4.779.908 6.879 2.404M15 11a3 3 0 11-6 0 3 3 0 6 0z" />
-                </svg>
-            </button>
+            <div class="text-white text-2xl flex items-center gap-2">
+                <span>{{ displayName }}</span>
+            </div>
         </div>
 
 <div class=" mt-24">
@@ -82,6 +80,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
+import { useUser } from "../composables/useUser";
+const { displayName } = useUser()
 
 interface Profissional {
     nome: string;
@@ -94,9 +94,18 @@ interface Dia {
 
 export default defineComponent({
     name: "Agendamento",
-    data() {
+    setup() {
+        const { displayName } = useUser();
         const router = useRouter();
 
+        const goToHome = () => router.push('/');
+
+        return {
+            displayName,
+            goToHome,
+        };
+    },
+    data() {
         return {
         profissionais: [
             { nome: 'Funcionário 1' },
@@ -139,7 +148,6 @@ export default defineComponent({
             diaSelecionado: null as Dia | null,
             horarioSelecionado: null as string | null,
             profissionalSelecionado: null as Profissional | null,
-            goToHome: () => router.push('/'),
         };
     },
     methods: {

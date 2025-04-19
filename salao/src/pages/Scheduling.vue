@@ -2,13 +2,9 @@
 <div class="min-h-screen flex flex-col bg-white">
     <div class=" fixed top-0 left-0 w-full bg-pink-300 flex items-center justify-between px-6 py-3 shadow-md z-50">
         <h1 class="text-white text-xl font-bold">Cabeleireiro</h1>
-        <button class="text-white text-2xl">
-        <!--icon-->
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M5.121 17.804A10.971 10.971 0 0112 15c2.486 0 4.779.908 6.879 2.404M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-        </button>
+        <div class="text-white text-2xl flex items-center gap-2">
+            <span>{{ displayName }}</span>
+        </div>
 </div>
 <main class="flex-1 max-w-5xl mx-auto w-full p-6">
 <!-- Serviços -->
@@ -140,6 +136,8 @@
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import router from '../router';
+import { useUser } from "../composables/useUser";
+const { displayName } = useUser()
 
 interface Funcionario {
     nome: string;
@@ -165,12 +163,12 @@ export default defineComponent({
     name: 'scheduling',
     setup() {
         const router = useRouter();
+        const { displayName } = useUser();
         const funcionarios: Funcionario[] = [
-            {id: 1, nome: 'Funcionário 2' },
-            {id: 2, nome: 'Funcionário 3' },
-            {id: 3, nome: 'Funcionário 4' },
-            {id: 4, nome: 'Funcionário 5' },
-            {id: 5, nome: 'Funcionário 1' },
+            {id: 1, nome: 'Denise'},
+            {id: 2, nome: 'Ana'},
+            {id: 3, nome: 'Maria'},
+            {id: 4, nome: 'João'},
         ];
         const Clerk = (funcionario: Funcionario) => {
         router.push({
@@ -185,6 +183,7 @@ export default defineComponent({
             goTotimings,
             goToHome,
             funcionarios,
+            displayName,
         };
     },
 });

@@ -1,163 +1,297 @@
 <template>
-    <div class="min-h-screen flex flex-col bg-white">
-      <!-- Header -->
-      <header class="fixed top-0 left-0 w-full bg-pink-300 flex items-center justify-between px-6 py-3 shadow-md z-50">
-        <button @click="goToHome">
-          <h1 class="text-white text-xl font-bold">Cabeleireiro</h1>
-        </button>
-        <button class="text-white text-2xl">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M5.121 17.804A10.971 10.971 0 0112 15c2.486 0 4.779.908 6.879 2.404M15 11a3 3 0 11-6 0 3 3 6 0z" />
-          </svg>
-        </button>
-      </header>
-  
-      <!--principal-->
-      <main class="pt-24 max-w-4xl mx-auto flex flex-col md:flex-row gap-4 p-4">
-        <!--Card do Funcionário-->
-        <div class="w-full md:w-1/3">
-          <div class="bg-pink-100 shadow-sm flex flex-col items-center justify-center p-6 m-4">
-            <img src="../../quadrado branco.png" alt="Foto do Funcionário" class="w-50 h-70 bg-white mb-4" />
-            <h2 class="text-xl font-bold text-gray-800">{{ funcionarioSelecionado?.nome || 'Funcionário não selecionado' }}</h2>
-          </div>
+  <div class="min-h-screen flex flex-col bg-white">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full bg-pink-300 flex items-center justify-between px-6 py-3 shadow-md z-50">
+      <button @click="goToHome">
+        <h1 class="text-white text-xl font-bold">Cabeleireiro</h1>
+      </button>
+      <div class="text-white text-2xl flex items-center gap-2">
+        <span>{{ displayName }}</span>
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="pt-24 max-w-4x2 mx-auto flex flex-col gap-6 p-4">
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="bg-pink-100 shadow-sm flex flex-col items-center justify-center p-6 m-4">
+          <img
+            src="../../quadrado branco.png"
+            alt="Foto do Funcionário"
+            class="w-50 h-70 bg-white mb-4"
+          />
+          <h3 class="font-bold mb-2 text-center">
+            {{ funcionarioSelecionado?.nome || 'Funcionário não selecionado' }}
+          </h3>
         </div>
-  
-        <!--Seleção de Data-->
-        <div class="w-full md:w-2/3">
-          <div class="max-w-full overflow-x-auto whitespace-nowrap border-gray-300 pb-4 mb-4">
-            <div class="inline-flex space-x-3">
+
+        <!-- ▷ Coluna de Data + Serviços + Horários -->
+        <div class="md:col-span-2 flex flex-col">
+
+          <!-- ← Mês e mês atual → -->
+          <div class="flex items-center justify-between mb-2">
+            <!-- Desabilita voltar se for o mês atual -->
+            <button
+              @click="prevMonth"
+              :disabled="isFirstMonth"
+              :class="[
+                'p-2 bg-pink-200 rounded transition-colors',
+                isFirstMonth
+                  ? 'opacity-50 cursor-not-allowed hover:bg-pink-200'
+                  : 'hover:bg-pink-300'
+              ]"
+            >
+              ‹
+            </button>
+
+            <span class="text-lg font-semibold">
+              {{ format(month, 'MMMM yyyy', { locale: ptBR }) }}
+            </span>
+
+            <button
+              @click="nextMonth"
+              class="p-2 bg-pink-200 rounded hover:bg-pink-300"
+            >
+              ›
+            </button>
+          </div>
+
+          
+          <div class="overflow-x-auto pb-4 mb-4 no-scrollbar">
+            <div class="flex">
               <div
-                v-for="(dia, index) in dias"
-                :key="index" class="cursor-pointer flex flex-col items-center text-center px-4 py-2" @click="selecionarDia(dia)">
-                <div :class="{ 'border-b-4 border-pink-500': diaSelecionado?.data === dia.data }">
-                  <span class="font-semibold text-base">{{ dia.diaSemana }}</span>
-                  <br/>
-                  <span class="text-sm text-gray-600">{{ dia.data }}</span>
-                </div>
+                v-for="d in monthDays"
+                :key="d.toISOString()"
+                @click="selecionarDia(d)"
+                :class="[
+                  // cada item ocupa espaço igual (flex‑1) até o mínimo de 4rem
+                  'flex-1 min-w-[4rem] flex flex-col items-center cursor-pointer p-2 rounded transition',
+                  isSameDay(d, today)
+                    ? 'bg-pink-500 text-white'
+                    : 'hover:bg-pink-100'
+                ]"
+              >
+                <span class="text-sm font-medium">{{ format(d, 'EEE', { locale: ptBR }) }}</span>
+                <span class="text-lg">{{ format(d, 'dd') }}</span>
               </div>
             </div>
           </div>
-  
-          <!-- Seleção de horário (Aparece após selecionar a data) -->
-          <div v-if="diaSelecionado" class="mb-6">
-            <h3 class="text-lg font-semibold mb-2">Horários disponíveis:</h3>
-            <div class="grid grid-cols-3 gap-2">
-              <button
-                v-for="(horario, index) in horarios"
-                :key="index"
-                :class="['px-4 py-2 rounded transition', horarioSelecionado === horario ? 'hover:bg-pink-300 text-white' : 'bg-pink-200']"
-                @click="selecionarHorario(horario)"
-            >
-                {{ horario }}
-            </button>
-            </div>
-        </div>
 
-        <!--Resumo do Agendamento-->
-        <div v-if="horarioSelecionado" class="bg-gray-100 p-6 rounded text-center">
-            <h2 class="text-lg font-bold mb-2">Resumo do Agendamento</h2>
-            <p v-if="diaSelecionado"><span class="font-semibold">Data:</span> {{ diaSelecionado.data }} ({{ diaSelecionado.diaSemana }})</p>
-            <p><span class="font-semibold">Horário:</span> {{ horarioSelecionado }}</p>
-            <p><span class="font-semibold">Profissional:</span> {{ funcionarioSelecionado?.nome }}</p>
-            <button class="mt-4 px-4 py-2 bg-pink-300 text-white rounded hover:bg-pink-500 transition" @click="finalizar"> Finalizar Agendamento </button>
+          
+          <div v-if="diaSelecionado" class="mt-4">
+            <h3 class="text-lg font-semibold mb-2">Serviços</h3>
+            <div class="grid grid-cols-3 grid-rows-2 gap-2 mb-4">
+              <button
+                v-for="(s, i) in services"
+                :key="i"
+                @click="selectService(s)"
+                :class="[ 
+                  'px-3 py-1 rounded transition font-semibold ',
+                  selectedService === s
+                    ? 'bg-pink-400 text-white'
+                    : 'bg-pink-200 hover:bg-pink-300 text-gray-800'
+                ]"
+              >
+                {{ s }}
+              </button>
+            </div>
+          </div>
+
+          
+          <div v-if="selectedService" class="mt-4">
+            <h3 class="text-lg font-semibold mb-2">Horários disponíveis:</h3>
+            <div class="grid grid-cols-3 gap-2 mb-4">
+              <button
+                v-for="(horario, i) in horarios"
+                :key="i"
+                @click="selecionarHorario(horario)"
+                :class="[ 
+                  'px-3 py-1 rounded transition font-semibold ',
+                  horarioSelecionado === horario
+                    ? 'bg-pink-400 text-white'
+                    : 'bg-pink-200 hover:bg-pink-300 text-gray-800'
+                ]"
+              >
+                {{ horario }}
+              </button>
+            </div>
+
+            
+            <div v-if="horarioSelecionado" class="bg-gray-100 p-6 rounded text-center mt-10">
+              <h2 class="text-lg font-bold mb-2">Resumo do Agendamento</h2>
+              <p>
+                <span class="font-semibold">Data:</span>
+                {{ diaSelecionado?.data }} ({{ diaSelecionado?.diaSemana }})
+              </p>
+              <p><span class="font-semibold">Serviço:</span> {{ selectedService }}</p>
+              <p><span class="font-semibold">Horário:</span> {{ horarioSelecionado }}</p>
+              <p><span class="font-semibold">Profissional:</span> {{ funcionarioSelecionado?.nome }}</p>
+              <button
+                class="mt-3 px-4 py-2 bg-pink-400 text-white rounded hover:bg-pink-500 transition"
+                @click="finalizar"
+              >
+                Finalizar Agendamento
+              </button>
+            </div>
+          </div>
         </div>
-        </div>
+      </div>
     </main>
-    <div class="fixed bottom-4 right-4 z-50">
-        <button class="bg-pink-500 hover:bg-pink-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-md transition duration-300">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6" viewBox="0 0 16 16">
-            <path d="M13.601 2.326A7.613 7.613 0 0 0 8.002 0 7.62 7.62 0 0 0 0 7.621a7.59 7.59 0 0 0 1.073 3.897L0 16l4.584-1.196A7.618 7.618 0 0 0 8 15.243a7.62 7.62 0 0 0 7.621-7.622 7.57 7.57 0 0 0-2.02-5.295Zm-5.599 12a6.4 6.4 0 0 1-3.273-.89l-.235-.139-2.721.71.727-2.652-.153-.272a6.392 6.392 0 0 1-.969-3.405 6.435 6.435 0 0 1 6.434-6.436 6.405 6.405 0 0 1 4.538 1.88 6.42 6.42 0 0 1 1.885 4.54 6.435 6.435 0 0 1-6.433 6.434Zm3.527-4.82c-.193-.098-1.148-.566-1.326-.63-.178-.064-.308-.096-.437.097-.129.193-.503.63-.617.759-.114.129-.228.145-.421.048-.193-.097-.813-.299-1.548-.955-.572-.51-.958-1.14-1.07-1.333-.112-.193-.012-.297.085-.394.087-.086.193-.228.29-.342.098-.114.129-.193.194-.322.065-.129.032-.242-.016-.34-.048-.097-.437-1.057-.599-1.453-.157-.378-.317-.327-.437-.327l-.374-.007c-.129 0-.34.048-.518.242-.178.193-.678.662-.678 1.611s.694 1.874.79 2.003c.097.129 1.365 2.086 3.312 2.926 1.162.5 1.618.542 2.204.455.355-.053 1.148-.469 1.311-.922.161-.453.161-.841.112-.922-.048-.08-.177-.129-.37-.228Z"/>
-        </svg>
-        </button>
-    </div>
-    </div>
+  </div>
 </template>
 
-  <script lang="ts">
-  import { defineComponent, ref, onMounted } from "vue";
-  import { useRouter, useRoute } from "vue-router";
-  
-  interface Funcionario {
-    id: number;
-    nome: string;
-  }
-  
-  interface Dia {
-    diaSemana: string;
-    data: string;
-  }
-  
-  export default defineComponent({
-    name: "FuncionarioView",
-    setup() {
+<script lang="ts">
+import { defineComponent, ref, onMounted, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { useUser } from "../composables/useUser";
+import {
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isBefore,
+  isSameDay,
+  format,
+  addMonths
+} from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+
+interface Funcionario { id: number; nome: string; }
+interface Dia { diaSemana: string; data: string; }
+
+export default defineComponent({
+  name: "FuncionarioView",
+  setup() {
+    const { displayName } = useUser();
     const router = useRouter();
-    const route = useRoute();
+    const route  = useRoute();
 
-      const dias = ref<Dia[]>([
-        { diaSemana: "Sex", data: "14/03" },
-        { diaSemana: "Sab", data: "15/03" },
-        { diaSemana: "Dom", data: "16/03" },
-        { diaSemana: "Seg", data: "17/03" },
-        { diaSemana: "Ter", data: "18/03" },
-        { diaSemana: "Qua", data: "19/03" },
-        { diaSemana: "Qui", data: "20/03" },
-        { diaSemana: "Sex", data: "21/03" },
-      ]);
-  
-      // Horários disponíveis
-      const horarios = ref<string[]>(["08:00", "09:00", "10:00", "11:00", "13:00", "15:00"]);
+    // hoje e mês reativo
+    const today = new Date();
+    const month = ref<Date>(new Date());
 
-      // Selecionados pelo usuário
-      const diaSelecionado = ref<Dia | null>(null);
-      const horarioSelecionado = ref<string | null>(null);
-      const funcionarioSelecionado = ref<Funcionario | null>(null);
+    // gera dias do mês (somente futuros, se for mês atual)
+    const monthDays = computed<Date[]>(() =>
+      eachDayOfInterval({
+        start: startOfMonth(month.value),
+        end:   endOfMonth(month.value)
+      }).filter(d =>
+        month.value.getMonth() !== today.getMonth()
+          ? true
+          : !isBefore(d, today)
+      )
+    );
 
-      const goToHome = () => router.push("/");
+    // se já estamos no mês/ano atual, não volta
+    const isFirstMonth = computed(() =>
+      month.value.getMonth() === today.getMonth() &&
+      month.value.getFullYear() === today.getFullYear()
+    );
 
-      const selecionarDia = (dia: Dia) => {
-        diaSelecionado.value = dia;
-        horarioSelecionado.value = null; // Reset horário ao mudar de dia
+    const prevMonth = () => {
+      if (!isFirstMonth.value) {
+        month.value = addMonths(month.value, -1);
+      }
+    };
+    const nextMonth = () => {
+      month.value = addMonths(month.value, +1);
+    };
+
+    const dias = ref<Dia[]>([
+      { diaSemana: "Sex", data: "14/03" },
+      { diaSemana: "Sab", data: "15/03" },
+      { diaSemana: "Dom", data: "16/03" },
+      { diaSemana: "Seg", data: "17/03" },
+      { diaSemana: "Ter", data: "18/03" },
+      { diaSemana: "Qua", data: "19/03" },
+      { diaSemana: "Qui", data: "20/03" },
+      { diaSemana: "Sex", data: "21/03" },
+    ]);
+
+    // Horários disponíveis
+    const horarios = ref<string[]>(["08:00", "09:00", "10:00", "11:00", "13:00", "15:00"]);
+
+    // Selecionados pelo usuário
+    const diaSelecionado = ref<Dia | null>(null);
+    const horarioSelecionado = ref<string | null>(null);
+    const funcionarioSelecionado = ref<Funcionario | null>(null);
+
+    // Nova lógica de serviço
+    const services = ['Cabelo', 'Barba', 'Cabelo e barba', 'Pé', 'Mão', 'Pé e mão'];
+    const selectedService = ref<string | null>(null);
+    const selectService = (s: string) => {
+      selectedService.value = s;
+    };
+
+    const goToHome = () => router.push("/");
+
+    const selecionarDia = (dia: Date) => {
+      diaSelecionado.value = {
+        diaSemana: format(dia, 'EEE', { locale: ptBR }),
+        data: format(dia, 'dd/MM', { locale: ptBR })
       };
+      horarioSelecionado.value = null; // Reset horário ao mudar de dia
+    };
 
-      const selecionarHorario = (horario: string) => {
-        horarioSelecionado.value = horario;
-      };
+    const selecionarHorario = (horario: string) => {
+      horarioSelecionado.value = horario;
+    };
 
-      const finalizar = () => {
-        if (diaSelecionado.value && horarioSelecionado.value && funcionarioSelecionado.value) {
-          alert(
-            `Agendamento finalizado!\n\nData: ${diaSelecionado.value.data} (${diaSelecionado.value.diaSemana})\nHorário: ${horarioSelecionado.value}\nProfissional: ${funcionarioSelecionado.value.nome}`
-          );
-        } else {
-          alert("Por favor, selecione uma data e um horário para finalizar o agendamento.");
-        }
-      };
-  
-      // Pega funcionário da query
-      onMounted(() => {
-        const queryFuncionario = route.query.funcionario as string | undefined;
-        if (queryFuncionario) {
-          try {
-            funcionarioSelecionado.value = JSON.parse(queryFuncionario);
-          } catch (error) {
-            console.error("Erro ao parsear query:", error);
-          }
+    const finalizar = () => {
+      if (diaSelecionado.value && horarioSelecionado.value && funcionarioSelecionado.value) {
+        alert(
+          `Agendamento finalizado!\n\nData: ${diaSelecionado.value.data} (${diaSelecionado.value.diaSemana})\nHorário: ${horarioSelecionado.value}\nProfissional: ${funcionarioSelecionado.value.nome}`
+        );
+      } else {
+        alert("Por favor, selecione uma data e um horário para finalizar o agendamento.");
+      }
+    };
+
+    const goToScheduling = () => {
+      router.push({
+        name: "Scheduling",
+        query: {
+          funcionario: JSON.stringify(funcionarioSelecionado.value)
         }
       });
-  
-      return {
-        goToHome,
-        dias,
-        diaSelecionado,
-        selecionarDia,
-        horarios,
-        horarioSelecionado,
-        selecionarHorario,
-        funcionarioSelecionado,
-        finalizar,
-      };
-    },
-  });
-  </script>
-  
+    };
+
+    // Pega funcionário da query
+    onMounted(() => {
+      const queryFuncionario = route.query.funcionario as string | undefined;
+      if (queryFuncionario) {
+        try {
+          funcionarioSelecionado.value = JSON.parse(queryFuncionario);
+        } catch (error) {
+          console.error("Erro ao parsear query:", error);
+        }
+      }
+    });
+
+    return {
+      displayName,
+      goToHome,
+      goToScheduling,
+      dias,
+      diaSelecionado,
+      selecionarDia,
+      horarios,
+      horarioSelecionado,
+      selecionarHorario,
+      funcionarioSelecionado,
+      finalizar,
+      services,
+      selectedService,
+      selectService,
+      month,
+      monthDays,
+      isFirstMonth,
+      prevMonth,
+      nextMonth,
+      isSameDay, 
+      today,
+      format, 
+      addMonths,
+      ptBR,
+    };
+  },
+});
+</script>

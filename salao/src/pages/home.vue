@@ -3,13 +3,9 @@
     <!--header-->
     <div class=" fixed top-0 left-0 w-full bg-pink-300 flex items-center justify-between px-6 py-3 shadow-md z-50">
         <h1 class="text-white text-xl font-bold">Cabeleireiro</h1>
-        <button class="text-white text-2xl">
-        <!--icon-->
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M5.121 17.804A10.971 10.971 0 0112 15c2.486 0 4.779.908 6.879 2.404M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-        </button>
+        <div class="text-white text-2xl flex items-center gap-2">
+            <span>{{ displayName }}</span>
+        </div>
     </div>
 
     <!--banner -->
@@ -85,8 +81,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
+import { useUser } from "../composables/useUser";
 import router from '../router';
-
+const { displayName } = useUser()
 
 interface Funcionario {
     nome: string;
@@ -96,6 +93,7 @@ interface Funcionario {
 export default defineComponent({
     name: 'HomePage',
     setup() {
+    const { displayName } = useUser();
     const router = useRouter();
     const funcionarios: Funcionario[] = [
         { nome: 'Funcionário 1', func: 'Funções' },
@@ -109,6 +107,7 @@ export default defineComponent({
     };
 
     return {
+        displayName,
         funcionarios,
         goToCalendar,
     };

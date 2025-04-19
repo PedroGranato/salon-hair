@@ -49,8 +49,7 @@ const router = useRouter()
 
 interface LoginResponse {
   token: string
-  // se seu backend retornar mais dados do usuário, adicione aqui
-  // user?: { id: string; username: string; email: string }
+  user: { id: string; username: string; email: string }
 }
 
 const handleLogin = async () => {
@@ -60,19 +59,15 @@ const handleLogin = async () => {
       password: password.value
     })
 
-    const { token } = res.data
+    // ✅ Desestrutura token E user
+    const { token, user } = res.data
 
-    // guarda token e e‑mail no localStorage
     localStorage.setItem('token', token)
-    localStorage.setItem(
-      'user',
-      JSON.stringify({ email: email.value /*, ...res.data.user */ })
-    )
+    // ⬇️ salva exatamente o objeto user com username
+    localStorage.setItem('user', JSON.stringify(user))
 
-    // opcional: define header default
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-
-    router.push('/') // redireciona após login
+    router.push('/')
   } catch (err) {
     console.error(err)
     alert('Credenciais inválidas')
