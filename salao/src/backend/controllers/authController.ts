@@ -1,38 +1,69 @@
-import { Request, Response } from 'express'
-import UserModel from '../models/Users'
+// src/backend/controllers/authController.ts
+import { Request, Response, NextFunction } from 'express'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import UserModel from '../models/Users'
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
-    const { username, birthdate, telephone, email, password } = req.body
+    console.log('🔍 register body:', req.body)             // 1️⃣
+    const { username, email, telephone, birthdate, password } = req.body
 
-
-    const existingUser = await UserModel.findOne({ email })
-    if (existingUser) {
-      return res.status(400).json({ message: 'Email já registrado.' })
+    if (!username || !email || !telephone || !birthdate || !password) {
+      res.status(400).json({ message: 'Todos os campos são obrigatórios' })
+      return
     }
 
+    const exists = await UserModel.findOne({ email })
+    if (exists) {
+      res.status(400).json({ message: 'Email já registrado.' })
+      return
+    }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashed = await bcrypt.hash(password, 10)
+    const user = new UserModel({ username, email, telephone, birthdate, password: hashed })
 
-    
-    const newUser = new UserModel({
-      username,
-      birthdate,
-      telephone,
-      email,
-      password: hashedPassword,
-    })
-
-    await newUser.save()
+    const saved = await user.save()
+    console.log('✅ Usuário salvo:', saved)                  // 2️⃣
 
     res.status(201).json({ message: 'Usuário registrado com sucesso!' })
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ message: 'Erro no servidor.' })
+  } catch (err) {
+    console.error('❌ Erro no register controller:', err)    // 3️⃣
+    next(err)
   }
-  console.log('🔍 Dados recebidos:', req.body)
-
 }
 
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { email, password } = req.body
+    if (!email || !password) {
+      res.status(400).json({ message: 'Email e senha são obrigatórios' })
+      return
+    }
+    const user = await UserModel.findOne({ email })
+    if (!user) {
+      res.status(401).json({ message: 'Credenciais inválidas' })
+      return
+    }
+    const match = await bcrypt.compare(password, user.password)
+    if (!match) {
+      res.status(401).json({ message: 'Credenciais inválidas' })
+      return
+    }
+    // aqui você gera o token, por exemplo:
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET!, {
+      expiresIn: '1h'
+    })
+    res.json({ token })
+  } catch (err) {
+    next(err)
+  }
+}

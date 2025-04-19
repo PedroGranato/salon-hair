@@ -1,12 +1,24 @@
+import './index.css'; 
 import { createApp } from 'vue';
 import App from './App.vue';
-import './index.css';
 import router from './router';
+import axios from 'axios';
 
 const app = createApp(App);
 
-// Use the router
-app.use(router);
+// ao iniciar, carrega token e header
+const token = localStorage.getItem('token');
+if (token) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 
-// Mount the app
+// opcional: guarda o e‑mail ou outros dados em um store/composable
+const userJson = localStorage.getItem('user');
+if (userJson) {
+  const user = JSON.parse(userJson);
+  // você pode expor esse `user` em um composable para usar em qualquer componente
+  console.log('Usuário logado:', user);
+}
+
+app.use(router);
 app.mount('#app');
